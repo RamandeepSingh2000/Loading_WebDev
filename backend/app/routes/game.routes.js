@@ -129,6 +129,53 @@ router.route('/api/games').post(upload.fields([
     .then(game => res.status(200).json(game))
     .catch(err => res.status(400).json({"Error": err}));
 });
+
+//put game
+router.route('/api/games/:id').put(upload.fields([
+  { name: 'downloadFile', maxCount: 1 },
+  { name: 'displayImage', maxCount: 1 },
+  { name: 'additionalImages', maxCount: 5 }
+]), async(req, res) => {
+  
+  gameModel.findById(req.params.id)
+  .then(game =>{
+    game.name = req.body.name;
+    game.description = req.body.description;
+    game.downloadFileURL = req.files['downloadFile'] ? req.files['downloadFile'][0].path : "";
+    game.displayImageURL = req.files['displayImage'] ? req.files['displayImage'][0].path : "";
+    game.additionalImagesURLs = req.files['additionalImages'] ? req.files['additionalImages'].map(file => file.path) : [];
+    game.price = req.body.price;
+    game.ownerId = req.body.ownerId;
+    game.collaboratorsIds = req.body.collaboratorsIds;
+    game.uploadDate = req.body.uploadDate;
+    game.publishDate = req.body.publishDate;
+    game.tags = req.body.tags;
+    game.genre = req.body.genre;
+    game.supportedPlatforms = req.body.supportedPlatforms;
+    game.additionalTechnicalDescription = req.body.additionalTechnicalDescription;
+    game.status = req.body.status;
+    game.save()
+    .then(game => res.status(200).json(game))
+    .catch(err => res.status(400).json({"Error": err}));
+  })
+  .catch(err => res.status(400).json({"Error": err}));
+  
+});
+
+//Delete game
+router.route('/api/games/:id').delete((req,res)=>{
+  gameModel.findById(req.params.id)
+  .then(game =>{
+    game.deleteOne()
+    .then(() => res.status(200).send("Deleted successfully"))
+    .catch(err => res.status(400).json({"Error": err}));
+  })
+  .catch(err => res.status(400).json({"Error": err}));
+});
+
+
+
+
 async function getFileContent(fileName)
 {
     const filePath = path.join(__dirname, '..', '..', 'uploads', fileName); //for testing  
