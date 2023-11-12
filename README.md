@@ -1,5 +1,5 @@
-Backend will be under server
-Frontend will be under client
+Backend will be under backend
+Frontend will be under frontend
 To run locally:
-- cd client
+- cd frontend
 - npm start
