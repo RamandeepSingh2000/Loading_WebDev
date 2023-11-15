@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+// State to holf info
 const GameInfoPage = () => {
   const [gameInfo, setGameInfo] = useState({
     name: '',

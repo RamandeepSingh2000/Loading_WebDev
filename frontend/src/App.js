@@ -15,7 +15,7 @@ function App() {
         <BrowserRouter>
         
         <Routes>
-                  {/* Log In / Sign Up */}
+                 
                   <Route path='/game-info' element={ <GameInfoPage/>}/>
 
           </Routes>
