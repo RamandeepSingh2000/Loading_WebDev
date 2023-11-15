@@ -23,7 +23,7 @@ export default class Navigation extends Component{
                       <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="my-games">My Games</a>
+                      <a class="nav-link" href="game-upload">Upload Game</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="login">Login</a>
