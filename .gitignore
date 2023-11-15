@@ -1,6 +1,9 @@
 appsettings.json
 uploads/
 
+package.json
+package-lock.json
+
 # Logs
 logs
 *.log
