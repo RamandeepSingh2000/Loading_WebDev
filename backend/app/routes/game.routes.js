@@ -181,7 +181,7 @@ async function getFileContent(fileName)
       const stats = await fs.promises.stat(filePath);
 
       if (!stats.isDirectory()) {
-        fileContent = await fs.promises.readFile(filePath, 'utf-8');
+        fileContent = await fs.promises.readFile(filePath);
       }
     } catch (err) {
       console.error(`Error reading file ${filePath}: ${err.message}`);

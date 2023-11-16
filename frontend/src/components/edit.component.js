@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-function GameUploadForm() {
+function GameEditPage() {
+  const {id} = useParams();
   const [gameData, setGameData] = useState({
     name: '',
     description: '',
@@ -36,9 +38,9 @@ function GameUploadForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, id) => {
     e.preventDefault();
-
+    console.log(id);
     let formData = new FormData();
 
     // Append file inputs to formData
@@ -74,8 +76,8 @@ function GameUploadForm() {
 
     // Send formData to server
     try {
-      const response = await axios.post(
-        'http://localhost:8081/api/games',
+      const response = await axios.put(
+        `http://localhost:8081/api/games/${id}`,
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -110,7 +112,7 @@ function GameUploadForm() {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => handleSubmit(e, id)}
       encType="multipart/form-data"
       className="container"
     >
@@ -301,10 +303,10 @@ function GameUploadForm() {
       </div>
 
       <button type="submit" className="btn btn-primary">
-        Upload Game
+        Confirm Edit
       </button>
     </form>
   );
 }
 
-export default GameUploadForm;
+export default GameEditPage;

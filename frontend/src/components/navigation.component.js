@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import logo from '../images/logo.png'
+import { Link } from 'react-router-dom'
 
 export default class Navigation extends Component{
   constructor(props){
@@ -10,7 +11,6 @@ export default class Navigation extends Component{
       <div class="header_section">
          <div class="container-fluid">
             <nav class="navbar navbar-expand-lg navbar-light">
-               <a class="navbar-brand"href="index.html"></a>
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
                </button>
@@ -20,13 +20,10 @@ export default class Navigation extends Component{
                       <img src={logo} className="App-logo"/>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="/">Home</a>
+                      <Link to="/" class="nav-link" >Home</Link>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="game-upload">Upload Game</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="login">Login</a>
+                    <Link to="/game-upload" class="nav-link" >Upload Game</Link>
                     </li>
                   </ul>
                   <form class="form-inline my-2 my-lg-0">
