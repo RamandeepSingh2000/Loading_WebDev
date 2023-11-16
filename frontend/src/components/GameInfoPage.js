@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // Helper function to convert the string to Uint8Array
 const getImageFromBinary = data => {
@@ -7,6 +7,7 @@ const getImageFromBinary = data => {
 }
 // State to holf info
 const GameInfoPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [gameInfo, setGameInfo] = useState({
     name: '',
@@ -58,6 +59,17 @@ const GameInfoPage = () => {
     //window.open(gameInfo.downloadFile, '_blank');
   };
 
+  const handleDelete = async (id) => {  
+    try {
+      await axios.delete(`http://localhost:8081/api/games/${id}`); // Replace with your actual endpoint
+      
+    }
+    catch (error) {
+      console.error('Error fetching game information', error);
+    }
+
+    navigate("/");
+  }
   return (
     <div>
       <p>{gameInfo.name}</p>
@@ -80,6 +92,7 @@ const GameInfoPage = () => {
       <p>Owner ID: {gameInfo.ownerId}</p>
       <p>Collaborators IDs: {gameInfo.collaboratorsIds.join(', ')}</p>
       <button onClick={() => handleDownload(gameInfo.downloadFile)}>Download Game</button>
+      <button onClick={() => handleDelete(id)}>Delete Game</button>
       <Link to={`/game-edit/${id}`}>Edit Game</Link>
     </div>
   );
