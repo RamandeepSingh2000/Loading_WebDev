@@ -1,14 +1,9 @@
 import React, {Component} from "react";
 import { Link } from "react-router-dom";
-// Helper function to convert the string to Uint8Array
-const getImageFromBinary = data => {
-  return URL.createObjectURL(new Blob([new Uint8Array(data)], { type: "image/png" }))
-}
 
 export default class ItemCard extends Component{
   constructor(props){
     super(props)
-    this.state = {displayImage : props.game.displayImage == null ? null : getImageFromBinary(props.game.displayImage.data)};
   }
   render(){
     return(
@@ -17,7 +12,7 @@ export default class ItemCard extends Component{
       <Link to={"/game-info/" + this.props.game._id} className="nav-link">
             <figure>
               <img
-                src={this.state.displayImage}
+                src={this.props.game.displayImageURL}
                 alt={this.props.game.name}
                 style={{ maxWidth: "150px", height: "auto" }}
               />

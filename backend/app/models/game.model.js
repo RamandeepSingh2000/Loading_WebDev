@@ -8,13 +8,13 @@ let game = new Schema({
     description:{
         type: String
     },
-    downloadFileURL:{
+    downloadFileRef:{
         type: String
     },
-    displayImageURL:{
+    displayImageRef:{
         type: String
     },
-    additionalImagesURLs:{
+    additionalImagesRefs:{
         type: [String]
     },
     price:{

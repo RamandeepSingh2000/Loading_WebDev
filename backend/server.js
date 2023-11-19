@@ -3,13 +3,16 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const appSettings = require('./configReader');
 const routes = require('./app/routes/game.routes');
+const dotenv = require('dotenv');
+
+dotenv.config();
+const mongoDBConnectionString = process.env.MONGODB_CONNECTION_STRING;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect(appSettings.mongodbConnectionString,
+mongoose.connect(mongoDBConnectionString,
 {useNewUrlParser:true});
 
 const connection = mongoose.connection;
