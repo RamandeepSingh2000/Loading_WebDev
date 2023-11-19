@@ -1,5 +1,5 @@
-appsettings.json
-uploads/
+temp/
+.env
 
 package.json
 package-lock.json
