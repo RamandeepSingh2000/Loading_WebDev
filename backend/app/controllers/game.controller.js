@@ -71,8 +71,8 @@ module.exports = {
 
             const downloadFileRef = await saveFile(processFile(req.files['downloadFile']?.[0]?.path));
             const displayImageRef = await saveImage(processImage(req.files['displayImage']?.[0]?.path));
-            const additionalImagesRefs = await Promise.all((req.files['additionalImages'] ?? []).map(image => {
-                return saveImage(processImage(image.path));
+            const additionalImagesRefs = await Promise.all((req.files['additionalImages'] ?? []).map(async (image) => {
+                return await saveImage(await processImage(image.path));
             }));
 
             const game = new gameModel({
@@ -107,8 +107,8 @@ module.exports = {
             const game = await gameModel.findById(req.params.id);
             const downloadFileRef = await saveFile(processFile(req.files['downloadFile']?.[0]?.path));
             const displayImageRef = await saveImage(processImage(req.files['displayImage']?.[0]?.path));
-            const additionalImagesRefs = await Promise.all((req.files['additionalImages'] ?? []).map(image => {
-                return saveImage(processImage(image.path));
+            const additionalImagesRefs = await Promise.all((req.files['additionalImages'] ?? []).map(async (image) => {
+                return await saveImage(await processImage(image.path));
             }));
             const { name, description, price, ownerId, 
                 collaboratorsIds, uploadDate, publishDate, 
