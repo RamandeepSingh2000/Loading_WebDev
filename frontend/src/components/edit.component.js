@@ -12,14 +12,10 @@ function GameEditPage() {
     additionalImages: [],
     price: 0,
     ownerId: 0,
-    collaboratorsIds: [],
-    uploadDate: '',
-    publishDate: '',
     tags: [],
     genre: '',
     supportedPlatforms: [],
-    additionalTechnicalDescription: '',
-    status: '',
+    additionalTechnicalDescription: ''
   });
 
   const displayImageRef = useRef(null);
@@ -62,9 +58,6 @@ function GameEditPage() {
     formData.append('description', gameData.description);
     formData.append('price', gameData.price);
     formData.append('ownerId', gameData.ownerId);
-    formData.append('collaboratorsIds', gameData.collaboratorsIds);
-    formData.append('uploadDate', gameData.uploadDate);
-    formData.append('publishDate', gameData.publishDate);
     formData.append('tags', gameData.tags);
     formData.append('genre', gameData.genre);
     formData.append('supportedPlatforms', gameData.supportedPlatforms);
@@ -72,7 +65,6 @@ function GameEditPage() {
       'additionalTechnicalDescription',
       gameData.additionalTechnicalDescription
     );
-    formData.append('status', gameData.status);
 
     // Send formData to server
     try {
@@ -96,14 +88,10 @@ function GameEditPage() {
       additionalImages: [],
       price: 0,
       ownerId: 0,
-      collaboratorsIds: [],
-      uploadDate: '',
-      publishDate: '',
       tags: [],
       genre: '',
       supportedPlatforms: [],
-      additionalTechnicalDescription: '',
-      status: '',
+      additionalTechnicalDescription: ''
     });
     downloadFileRef.current.value = null;
     displayImageRef.current.value = null;
@@ -201,7 +189,7 @@ function GameEditPage() {
         />
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="collaboratorsIds">
           Collaborators IDs (comma-separated)
         </label>
@@ -237,7 +225,7 @@ function GameEditPage() {
           value={gameData.publishDate}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
 
       <div className="form-group">
         <label htmlFor="tags">Tags (comma-separated)</label>
@@ -290,7 +278,7 @@ function GameEditPage() {
         ></textarea>
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="status">Status</label>
         <input
           type="text"
@@ -300,7 +288,7 @@ function GameEditPage() {
           value={gameData.status}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
 
       <button type="submit" className="btn btn-primary">
         Confirm Edit
