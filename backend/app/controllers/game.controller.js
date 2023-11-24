@@ -1,6 +1,7 @@
 const gameModel = require('../models/game.model');
+const userModel = require('../models/user.model');
 const sharp = require('sharp');
-
+const jwt = require("jwt-simple");
 module.exports = {
     getGames : async function(req, res){
         try {
@@ -64,10 +65,18 @@ module.exports = {
     
     addGame : async function(req, res){
         try{
+            var user = await userModel.findById(req.user.id);
+            if(user.isAdmin){
+                res.json({ Error: "A game cannot be created from an admin account." });
+                return;
+            }
             const gameData = req.body;
             const { name, description, price, ownerId, 
-                collaboratorsIds, uploadDate, publishDate, 
-                tags, genre, supportedPlatforms, additionalTechnicalDescription, status } = gameData;
+                collaboratorsIds, tags, genre, supportedPlatforms, additionalTechnicalDescription } = gameData;
+
+            const uploadDate = Date.now();
+            const publishDate = "";
+            const status = "Uploaded";
 
             const downloadFileRef = await saveFile(processFile(req.files['downloadFile']?.[0]?.path));
             const displayImageRef = await saveImage(processImage(req.files['displayImage']?.[0]?.path));
@@ -92,7 +101,10 @@ module.exports = {
                 additionalTechnicalDescription,
                 status
             });
-            await game.save();  
+            
+            var gameId = (await game.save()).id;
+            user.gamesOwnedIds.push(gameId);  
+            await user.save();
             res.status(200).send(gameData);
         }
         catch(err){
@@ -103,6 +115,12 @@ module.exports = {
     putGame : async function(req, res){
         try{
 
+            var user = await userModel.findById(req.user.id);
+            if(!user.gamesOwnedIds.includes(req.params.id)){
+                res.status(401).json({ Error: "You don't own this game." });
+                return;
+            }
+
             const gameData = req.body;
             const game = await gameModel.findById(req.params.id);
             const downloadFileRef = await saveFile(processFile(req.files['downloadFile']?.[0]?.path));
@@ -111,8 +129,7 @@ module.exports = {
                 return await saveImage(await processImage(image.path));
             }));
             const { name, description, price, ownerId, 
-                collaboratorsIds, uploadDate, publishDate, 
-                tags, genre, supportedPlatforms, additionalTechnicalDescription, status } = gameData;
+                collaboratorsIds, tags, genre, supportedPlatforms, additionalTechnicalDescription } = gameData;
 
             game.name = name;
             game.description = description;
@@ -122,13 +139,10 @@ module.exports = {
             game.price = price;
             game.ownerId = ownerId;
             game.collaboratorsIds = collaboratorsIds;
-            game.uploadDate = uploadDate;
-            game.publishDate = publishDate;
             game.tags = tags;
             game.genre = genre;
             game.supportedPlatforms = supportedPlatforms;
             game.additionalTechnicalDescription = additionalTechnicalDescription;
-            game.status = status;
             await game.save();  
             res.status(200).send(gameData);
         }
@@ -139,7 +153,22 @@ module.exports = {
 
     deleteGame : async function(req, res){
         try{
+
+            var user = await userModel.findById(req.user.id);
+            if(!user.gamesOwnedIds.includes(req.params.id)){
+                res.status(401).json({ Error: "You don't own this game." });
+                return;
+            }            
+
             const game = await gameModel.findById(req.params.id);
+            for (let i = user.gamesOwnedIds.length - 1; i >= 0; --i) {
+                if (user.gamesOwnedIds[i] == game.id){
+                
+                    user.gamesOwnedIds.splice(i, 1);
+                }
+            }
+
+            await user.save();
             //delete files from cloud later
             await game.deleteOne();
             res.status(200).send("Deleted successfully");

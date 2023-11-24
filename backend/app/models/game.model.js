@@ -21,10 +21,7 @@ let game = new Schema({
         type: Number
     },
     ownerId:{
-        type: Number
-    },
-    collaboratorsIds:{
-        type: [Number]
+        type: String
     },
     uploadDate:{
         type: Date

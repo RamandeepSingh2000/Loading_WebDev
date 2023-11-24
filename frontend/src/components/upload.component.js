@@ -10,14 +10,10 @@ function GameUploadForm() {
     additionalImages: [],
     price: 0,
     ownerId: 0,
-    collaboratorsIds: [],
-    uploadDate: '',
-    publishDate: '',
     tags: [],
     genre: '',
     supportedPlatforms: [],
-    additionalTechnicalDescription: '',
-    status: '',
+    additionalTechnicalDescription: ''
   });
 
   const displayImageRef = useRef(null);
@@ -60,9 +56,6 @@ function GameUploadForm() {
     formData.append('description', gameData.description);
     formData.append('price', gameData.price);
     formData.append('ownerId', gameData.ownerId);
-    formData.append('collaboratorsIds', gameData.collaboratorsIds);
-    formData.append('uploadDate', gameData.uploadDate);
-    formData.append('publishDate', gameData.publishDate);
     formData.append('tags', gameData.tags);
     formData.append('genre', gameData.genre);
     formData.append('supportedPlatforms', gameData.supportedPlatforms);
@@ -70,7 +63,6 @@ function GameUploadForm() {
       'additionalTechnicalDescription',
       gameData.additionalTechnicalDescription
     );
-    formData.append('status', gameData.status);
 
     // Send formData to server
     try {
@@ -94,14 +86,10 @@ function GameUploadForm() {
       additionalImages: [],
       price: 0,
       ownerId: 0,
-      collaboratorsIds: [],
-      uploadDate: '',
-      publishDate: '',
       tags: [],
       genre: '',
       supportedPlatforms: [],
       additionalTechnicalDescription: '',
-      status: '',
     });
     downloadFileRef.current.value = null;
     displayImageRef.current.value = null;
@@ -199,7 +187,7 @@ function GameUploadForm() {
         />
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="collaboratorsIds">
           Collaborators IDs (comma-separated)
         </label>
@@ -211,9 +199,9 @@ function GameUploadForm() {
           value={gameData.collaboratorsIds}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="uploadDate">Upload Date</label>
         <input
           type="date"
@@ -235,7 +223,7 @@ function GameUploadForm() {
           value={gameData.publishDate}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
 
       <div className="form-group">
         <label htmlFor="tags">Tags (comma-separated)</label>
@@ -288,7 +276,7 @@ function GameUploadForm() {
         ></textarea>
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="status">Status</label>
         <input
           type="text"
@@ -298,7 +286,7 @@ function GameUploadForm() {
           value={gameData.status}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
 
       <button type="submit" className="btn btn-primary">
         Upload Game

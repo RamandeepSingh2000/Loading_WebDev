@@ -17,7 +17,6 @@ const GameInfoPage = () => {
     additionalImagesURLs: [],
     price: 0,
     ownerId: 0,
-    collaboratorsIds: [],
     uploadDate: new Date(),
     publishDate: new Date(),
     tags: [],
@@ -92,7 +91,6 @@ const GameInfoPage = () => {
       <p>Upload Date: {gameInfo.uploadDate.toDateString()}</p>
       <p>Publish Date: {gameInfo.publishDate.toDateString()}</p>
       <p>Owner ID: {gameInfo.ownerId}</p>
-      <p>Collaborators IDs: {gameInfo.collaboratorsIds.join(', ')}</p>
       <button onClick={() => handleDownload(gameInfo.downloadFileURL)}>Download Game</button>
       <button onClick={() => handleDelete(id)}>Delete Game</button>
       <Link to={`/game-edit/${id}`}>Edit Game</Link>

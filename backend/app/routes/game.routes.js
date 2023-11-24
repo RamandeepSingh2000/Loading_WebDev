@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const passport = require('passport');
 const gameController = require('../controllers/game.controller');
 
 // Set up multer storage
@@ -44,7 +45,9 @@ router.route('/api/games').post(upload.fields([
     { name: 'downloadFile', maxCount: 1 },
     { name: 'displayImage', maxCount: 1 },
     { name: 'additionalImages', maxCount: 5 }
-  ]), async(req, res) => { 
+  ]), 
+  passport.authenticate('jwt', { session: false }),
+   async(req, res) => { 
     await gameController.addGame(req, res);
     deleteFilesIfExist(req);
 });
@@ -54,12 +57,15 @@ router.route('/api/games/:id').put(upload.fields([
   { name: 'downloadFile', maxCount: 1 },
   { name: 'displayImage', maxCount: 1 },
   { name: 'additionalImages', maxCount: 5 }
-]), async(req, res) => {
+]), 
+passport.authenticate('jwt', { session: false }),
+ async(req, res) => {
     await gameController.putGame(req, res);    
 });
 
 //Delete game
-router.route('/api/games/:id').delete(async (req,res)=>{
+router.route('/api/games/:id').delete(passport.authenticate('jwt', { session: false }),
+async (req,res)=>{
   await gameController.deleteGame(req, res);
 });
 
