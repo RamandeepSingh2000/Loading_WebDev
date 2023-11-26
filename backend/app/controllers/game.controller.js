@@ -5,8 +5,29 @@ const jwt = require("jwt-simple");
 module.exports = {
     getGames : async function(req, res){
         try {
+            const filter = {};
+            const filterTags = req.query.tags;
+            if(filterTags){
+                
+                const tagsArray = filterTags.split(',').map(tag => tag.trim());
+                filter.tags = { $in: tagsArray };
+            };
+
+            const filterGenre = req.query.genre;
+            if(filterGenre){
+                
+                filter.genre = filterGenre;
+            }
+
+            const filterSupportedPlatforms = req.query.supportedPlatforms;
+            if(filterSupportedPlatforms){
+                
+                const platforms = filterSupportedPlatforms.split(',').map(platform => platform.trim());
+                filter.supportedPlatforms = { $in: platforms };
+            }
+
             const numberOfGames = req.query.numberOfGames ?? 5;
-            const games = await gameModel.find().limit(numberOfGames);
+            const games = await gameModel.find(filter).limit(numberOfGames);
         
             const gamesDisplayInfos = await Promise.all(
               games.map(async (game) => {

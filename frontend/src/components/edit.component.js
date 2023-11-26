@@ -72,7 +72,8 @@ function GameEditPage() {
         `http://localhost:8081/api/games/${id}`,
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { 'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` },
         }
       );
       console.log(response.data);

@@ -64,7 +64,13 @@ const GameInfoPage = () => {
 
   const handleDelete = async (id) => {  
     try {
-      await axios.delete(`http://localhost:8081/api/games/${id}`);
+      const token = localStorage.getItem('jwtToken');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.delete(`http://localhost:8081/api/games/${id}`, config);
     }
     catch (error) {
       console.error('Error fetching game information', error);
