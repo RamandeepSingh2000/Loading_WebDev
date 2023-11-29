@@ -25,6 +25,9 @@ export default class Navigation extends Component{
                     <li class="nav-item">
                     <Link to="/game-upload" class="nav-link" >Upload Game</Link>
                     </li>
+                    <li class="nav-item">
+                    <Link to="/login" class="nav-link" >Login</Link>
+                    </li>
                   </ul>
                   <form class="form-inline my-2 my-lg-0">
                      <div class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></div>
