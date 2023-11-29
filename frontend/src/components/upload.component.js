@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-
 function GameUploadForm() {
   const [gameData, setGameData] = useState({
     name: '',
@@ -13,7 +12,7 @@ function GameUploadForm() {
     tags: [],
     genre: '',
     supportedPlatforms: [],
-    additionalTechnicalDescription: ''
+    additionalTechnicalDescription: '',
   });
 
   const displayImageRef = useRef(null);
@@ -70,7 +69,10 @@ function GameUploadForm() {
         'http://localhost:8081/api/games',
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+          },
         }
       );
       console.log(response.data);
@@ -146,7 +148,6 @@ function GameUploadForm() {
           name="displayImage"
           onChange={handleFileChange}
           ref={displayImageRef}
-
         />
       </div>
 
