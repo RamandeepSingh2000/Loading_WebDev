@@ -15,12 +15,12 @@ export default class GamesGrid extends Component{
       .catch(e => console.log(e));
   }
 
-  //not sure if it should be done like this. making an api request every update.
-  componentDidUpdate(){
-      axios.get('http://localhost:8081/api/games?numberOfGames=20')
-      .then(res => this.setState({games: res.data}))
-      .catch(e => console.log(e));
-  }
+  // //not sure if it should be done like this. making an api request every update.
+  // componentDidUpdate(){
+  //     axios.get('http://localhost:8081/api/games?numberOfGames=20')
+  //     .then(res => this.setState({games: res.data}))
+  //     .catch(e => console.log(e));
+  // }
 
   gamesList()
   {

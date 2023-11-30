@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+const helper = require('../helper');
 
 function GameEditPage() {
   const {id} = useParams();
@@ -73,7 +74,7 @@ function GameEditPage() {
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` },
+              'Authorization': `Bearer ${helper.getAuthToken()}` },
         }
       );
       console.log(response.data);

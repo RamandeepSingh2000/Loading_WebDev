@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+const helper = require('../helper');
 
-function LoginPage() {
+function LoginPage(props) {
   
   const [userInfo, setUserInfo] = useState({
-    name: '',
+    username: '',
     email: '',
     password: ''
   });
@@ -16,10 +17,8 @@ function LoginPage() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
-    let formData = new FormData();
-
-
-    formData.append('name', userInfo.name);
+    const formData = new URLSearchParams();
+    formData.append('username', userInfo.username);
     formData.append('email', userInfo.email);
     formData.append('password', userInfo.password);
 
@@ -27,19 +26,17 @@ function LoginPage() {
     try {
       const response = await axios.post(
         `http://localhost:8081/api/login`,
-        formData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` },
-        }
+        formData
       );
-      console.log(response.data);
+      var token = response.data.token;
+      helper.login(token);
+      props.setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
     }
 
     setUserInfo({
-      name: '',
+      username: '',
       email: '',
       password: ''
     });
@@ -50,11 +47,21 @@ function LoginPage() {
   return (
     <form
       onSubmit={handleLoginSubmit}
-      encType="multipart/form-data"
       className="container"
     >
-      <h1> Login </h1>
+      <p> Login </p>
       <p>Enter your details below</p>
+      <div className="form-group">
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          className="form-control"
+          id="username"
+          name="username"
+          value={userInfo.username}
+          onChange={handleInputChange}
+        />
+      </div>
 
       <div className="form-group">
         <label htmlFor="email">Email</label>

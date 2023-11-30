@@ -7,6 +7,7 @@ const jwtSecret = process.env.JWT_SECRET;
     .then(user => {
         var payload = {
             id: user.id,
+            username: user.username,
             expire: Date.now() + 1000 * 60 * 60 * 24 * 7
         }
 

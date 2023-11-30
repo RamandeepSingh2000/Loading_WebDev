@@ -92,12 +92,13 @@ module.exports = {
                 return;
             }
             const gameData = req.body;
-            const { name, description, price, ownerId, 
+            const { name, description, price,  
                 collaboratorsIds, tags, genre, supportedPlatforms, additionalTechnicalDescription } = gameData;
 
             const uploadDate = Date.now();
             const publishDate = "";
             const status = "Uploaded";
+            const ownerId = user.id;
 
             const downloadFileRef = await saveFile(processFile(req.files['downloadFile']?.[0]?.path));
             const displayImageRef = await saveImage(processImage(req.files['displayImage']?.[0]?.path));
@@ -149,9 +150,9 @@ module.exports = {
             const additionalImagesRefs = await Promise.all((req.files['additionalImages'] ?? []).map(async (image) => {
                 return await saveImage(await processImage(image.path));
             }));
-            const { name, description, price, ownerId, 
+            const { name, description, price,  
                 collaboratorsIds, tags, genre, supportedPlatforms, additionalTechnicalDescription } = gameData;
-
+                const ownerId = user.id;
             game.name = name;
             game.description = description;
             game.downloadFileRef = downloadFileRef;

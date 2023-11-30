@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import{ BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -13,16 +13,19 @@ import LoginPage from './components/LoginPage.component'
 import RegisterPage from './components/RegisterPage.component'
 
 function App() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <div className="App">
       {/* <Home/> */}    
 
       <div> 
         <BrowserRouter>
-        <Navigation/>
+        <Navigation isLoggedIn = {isLoggedIn} setIsLoggedIn = {setIsLoggedIn}/>
           <Routes>
-            <Route path='/login' element={ <LoginPage/>}/>
-            <Route path='/register' element={ <RegisterPage/>}/>
+            <Route path='/login' element={ <LoginPage isLoggedIn = {isLoggedIn} setIsLoggedIn = {setIsLoggedIn}/>}/>
+            <Route path='/register' element={ <RegisterPage isLoggedIn = {isLoggedIn} setIsLoggedIn = {setIsLoggedIn}/>}/>
             <Route path='/game-info/:id' element={ <GameInfoPage/>}/>
             <Route path='/game-upload' element={ <GameUploadForm/>}/>
             <Route path='/owned-games' element={ <OwnedGames/>}/>
