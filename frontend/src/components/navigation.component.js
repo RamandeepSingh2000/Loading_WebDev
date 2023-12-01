@@ -1,11 +1,19 @@
 import React, {Component} from "react";
 import logo from '../images/logo.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+const helper = require('../helper');
 
 export default class Navigation extends Component{
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
+
+  handleLogout = () => {
+    helper.logout();
+    this.props.navigation.navigate("/");
+    this.props.setIsLoggedIn(false);
+  };
+
   render(){
     return(
       <div class="header_section">
@@ -23,10 +31,25 @@ export default class Navigation extends Component{
                       <Link to="/" class="nav-link" >Home</Link>
                     </li>
                     <li class="nav-item">
-                    <Link to="/game-upload" class="nav-link" >Upload Game</Link>
+                    {this.props.isLoggedIn && (
+                      // If logged in, show Upload Game link
+                      <Link to="/game-upload" className="nav-link">
+                        Upload Game
+                      </Link>
+                    )}
                     </li>
                     <li class="nav-item">
-                    <Link to="/login" class="nav-link" >Login</Link>
+                    {this.props.isLoggedIn ? (
+                      // If logged in, show Logout link
+                      <Link to="/" onClick={this.handleLogout} className="nav-link">
+                        Logout
+                      </Link>
+                    ) : (
+                      // If not logged in, show Login link
+                      <Link to="/login" className="nav-link">
+                        Login
+                      </Link>
+                    )}
                     </li>
                   </ul>
                   <form class="form-inline my-2 my-lg-0">

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+const helper = require('../helper');
 function GameUploadForm() {
   const [gameData, setGameData] = useState({
     name: '',
@@ -8,7 +9,6 @@ function GameUploadForm() {
     displayImage: null,
     additionalImages: [],
     price: 0,
-    ownerId: 0,
     tags: [],
     genre: '',
     supportedPlatforms: [],
@@ -54,7 +54,6 @@ function GameUploadForm() {
     formData.append('name', gameData.name);
     formData.append('description', gameData.description);
     formData.append('price', gameData.price);
-    formData.append('ownerId', gameData.ownerId);
     formData.append('tags', gameData.tags);
     formData.append('genre', gameData.genre);
     formData.append('supportedPlatforms', gameData.supportedPlatforms);
@@ -71,7 +70,7 @@ function GameUploadForm() {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            Authorization: `Bearer ${helper.getAuthToken()}`,
           },
         }
       );
@@ -87,7 +86,6 @@ function GameUploadForm() {
       displayImage: null,
       additionalImages: [],
       price: 0,
-      ownerId: 0,
       tags: [],
       genre: '',
       supportedPlatforms: [],
@@ -176,7 +174,7 @@ function GameUploadForm() {
         />
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="ownerId">Owner ID</label>
         <input
           type="number"
@@ -186,7 +184,7 @@ function GameUploadForm() {
           value={gameData.ownerId}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
 
       {/* <div className="form-group">
         <label htmlFor="collaboratorsIds">

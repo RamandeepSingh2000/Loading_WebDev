@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// Helper function to convert the string to Uint8Array
-const getImageFromBinary = data => {
-  return URL.createObjectURL(new Blob([new Uint8Array(data)], { type: "image/png" }))
-}
+const helper = require('../helper');
 // State to holf info
 const GameInfoPage = () => {
   const navigate = useNavigate();
@@ -97,9 +94,16 @@ const GameInfoPage = () => {
       <p>Upload Date: {gameInfo.uploadDate.toDateString()}</p>
       <p>Publish Date: {gameInfo.publishDate.toDateString()}</p>
       <p>Owner ID: {gameInfo.ownerId}</p>
-      <button onClick={() => handleDownload(gameInfo.downloadFileURL)}>Download Game</button>
-      <button onClick={() => handleDelete(id)}>Delete Game</button>
-      <Link to={`/game-edit/${id}`}>Edit Game</Link>
+      {
+        gameInfo.ownerId == helper.getUserId() && (
+          
+          <div>
+            <button onClick={() => handleDelete(id)}>Delete Game</button>
+            <Link to={`/game-edit/${id}`}>Edit Game</Link>
+          </div>          
+          )
+      }
+      <button onClick={() => handleDownload(gameInfo.downloadFileURL)}>Download Game</button>      
     </div>
   );
 };
