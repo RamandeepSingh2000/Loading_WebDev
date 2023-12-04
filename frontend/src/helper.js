@@ -15,6 +15,7 @@ module.exports = {
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("id");
         localStorage.removeItem("username");
+        localStorage.removeItem("isAdmin");
     },
 
     getAuthToken : function(){
@@ -26,8 +27,15 @@ module.exports = {
         localStorage.setItem("id", decodedToken.id);
         localStorage.setItem("username", decodedToken.username);
         localStorage.setItem("jwtToken", jwtToken);
+        localStorage.setItem("isAdmin", decodedToken.isAdmin);
     },
     getUserId : function(){
         return localStorage.getItem("id");
+    },
+    isUserAdmin : function(){
+        return localStorage.getItem("isAdmin") == "true";
+    },
+    getUsername : function(){
+        return localStorage.getItem("username");
     }
 }

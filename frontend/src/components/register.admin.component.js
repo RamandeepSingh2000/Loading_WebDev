@@ -3,7 +3,7 @@ import { Link, useNavigate  } from 'react-router-dom'
 import axios from 'axios';
 const helper = require('../helper');
 
-function RegisterPage(props) {
+function AdminRegisterPage(props) {
   const [userInfo, setUserInfo] = useState({
     username: '',
     email: '',
@@ -22,12 +22,18 @@ function RegisterPage(props) {
     formData.append('username', userInfo.username);
     formData.append('email', userInfo.email);
     formData.append('password', userInfo.password);
-
+    const bearerToken = localStorage.getItem('jwtToken');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    };
     // Send formData to server
     try {
       const response = await axios.post(
-        `http://localhost:8081/api/register`,
-        formData
+        `http://localhost:8081/api/adminregister`,
+        formData,
+        config
       );
       console.log(response.data);
     } catch (error) {
@@ -53,21 +59,9 @@ function RegisterPage(props) {
       email: '',
       password: ''
     });
-    //login
-    try {
-      const response = await axios.post(
-        `http://localhost:8081/api/login`,
-        formData
-      );
-      var token = response.data.token;
-      helper.login(token);
-      props.setIsLoggedIn(true);
-    } catch (error) {
-      setErrorMessages([error.message]);
-      return;
-    }
-    setErrorMessages([]);
-    navigate("/");
+
+    setErrorMessages([])
+    navigate("/admin");
   };
 
   return (
@@ -94,7 +88,7 @@ function RegisterPage(props) {
         <img src="/gaming_image.jpg" className='rounded float-start' style={{ width: 100 + "%", height: "auto" }} alt="Display" /> 
         </div>
         <div className='col'>
-        <p style={{fontWeight: 'bold', fontSize: 3 + "em", marginLeft: 0, marginTop: .3 + "rem"}}>Register</p>
+        <p style={{fontWeight: 'bold', fontSize: 3 + "em", marginLeft: 0, marginTop: .3 + "rem"}}>Register Admin</p>
         <div className="form-group">
         <label htmlFor="username" style={{fontWeight: 'bolder'}}>Username</label>
         <input
@@ -134,15 +128,10 @@ function RegisterPage(props) {
       <button type="submit" className="btn btn-primary" style={{marginTop: 1 + "rem"}}>
         Register
       </button>
-      <p style={{fontWeight: 'bold', fontSize: 1 + "em", marginLeft: 0}}>Already have an account?</p>
-      <button type="button" className="btn btn-primary">
-        <Link to="/login" >Login</Link>
-      </button>
         </div>
-        </div>
-      
+        </div>      
     </form>
   );
 }
 
-export default RegisterPage;
+export default AdminRegisterPage;

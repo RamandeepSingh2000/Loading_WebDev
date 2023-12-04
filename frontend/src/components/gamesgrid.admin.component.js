@@ -1,16 +1,21 @@
 import React, {Component} from "react";
 import ItemCard from "./itemcard.component";
 import axios from "axios";
+import helper from "../helper";
 
-export default class GamesGrid extends Component{
+export default class GamesGridAdmin extends Component{
   constructor(props){
     super(props)
-    this.state = {games: [], searchKeyword: ""}
+    this.state = {games: []}
   }
 
   componentDidMount(){
       
-      axios.get('http://localhost:8081/api/games?numberOfGames=20')
+      axios.get('http://localhost:8081/api/games/unpublished',{
+      headers: {
+        Authorization: `Bearer ${helper.getAuthToken()}`,
+      },
+    })
       .then(res => this.setState({games: res.data}))
       .catch(e => console.log(e));
   }
@@ -28,16 +33,6 @@ export default class GamesGrid extends Component{
     return games.map(currentGame => {
       return <ItemCard game={currentGame} />
     })
-  }
-
-  handleInputChange(input){
-    let url = 'http://localhost:8081/api/games?numberOfGames=20';
-    if(input){
-      url += `&searchKeyword=${input}`;
-    }
-    axios.get(url)
-      .then(res => this.setState({games: res.data, searchKeyword: input}))
-      .catch(e => console.log(e));
   }
 
   render(){
