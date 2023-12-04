@@ -2,6 +2,9 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 const helper = require('../helper');
 function GameUploadForm() {
+  const [errorMessages, setErrorMessages] = useState([]);
+  const [uploadInProgress, setUploadInProgress] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState(null);
   const [gameData, setGameData] = useState({
     name: '',
     description: '',
@@ -33,7 +36,11 @@ function GameUploadForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if(uploadInProgress){
+      return;
+    }
+    setUploadInProgress(true);
+    setUploadMessage("Your game is being uploaded...");
     let formData = new FormData();
 
     // Append file inputs to formData
@@ -74,9 +81,22 @@ function GameUploadForm() {
           },
         }
       );
+
       console.log(response.data);
     } catch (error) {
-      console.error(error);
+      const errors = [];
+      const checkErrors = error.response.data.checkErrors;
+      if(checkErrors){
+        checkErrors.forEach(err => {
+          errors.push(err.msg);
+        })
+      }
+      if(error.response.data.Error){
+        errors.push(error.response.data.Error);
+      }     
+      setErrorMessages(errors);
+      console.log(errorMessages);
+      return;
     }
 
     setGameData({
@@ -91,79 +111,63 @@ function GameUploadForm() {
       supportedPlatforms: [],
       additionalTechnicalDescription: '',
     });
+    setErrorMessages([]);
     downloadFileRef.current.value = null;
     displayImageRef.current.value = null;
     additionalImagesRef.current.value = [];
+    setUploadInProgress(false);
+    setUploadMessage("Your game is successfully uploaded. You can upload another if you like.");
   };
 
   return (
+    <div>
+      <p style={{fontWeight: 'bold'}}>Upload Game</p>    
     <form
       onSubmit={handleSubmit}
       encType="multipart/form-data"
       className="container"
-    >
-      <div className="form-group">
-        <label htmlFor="name">Game Name</label>
-        <input
-          type="text"
-          className="form-control"
-          id="name"
-          name="name"
-          value={gameData.name}
-          onChange={handleInputChange}
-        />
-      </div>
+      style={{textAlign: 'left'}}
+    >      
+      {
+        errorMessages.length > 0 && (          
+              errorMessages.map((error, key) => {
+                return(
+                  <div className='row'>
+                  <p class="text-danger" key={key}>{error}</p></div>);
+              })   
+          )
+      }
+      {
+        (uploadMessage != null) && (
+          <p class="text-success">{uploadMessage}</p>
+          )
+      }
+      <div className='row'>
+        <div className='col'>
+            <div className="form-group">
+            <label htmlFor="name" style={{fontWeight: 'bold'}}>Game Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={gameData.name}
+              onChange={handleInputChange}
+            />
+          </div>
 
-      <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea
-          className="form-control"
-          id="description"
-          name="description"
-          value={gameData.description}
-          onChange={handleInputChange}
-        ></textarea>
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="downloadFile">Download File</label>
-        <input
-          type="file"
-          className="form-control-file"
-          id="downloadFile"
-          name="downloadFile"
-          onChange={handleFileChange}
-          ref={downloadFileRef}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="displayImage">Display Image</label>
-        <input
-          type="file"
-          className="form-control-file"
-          id="displayImage"
-          name="displayImage"
-          onChange={handleFileChange}
-          ref={displayImageRef}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="additionalImages">Additional Images</label>
-        <input
-          type="file"
-          className="form-control-file"
-          id="additionalImages"
-          name="additionalImages"
-          multiple
-          onChange={handleFileChange}
-          ref={additionalImagesRef}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="price">Price</label>
+          <div className="form-group">
+            <label htmlFor="description" style={{fontWeight: 'bold'}}>Description</label>
+            <textarea
+              className="form-control"
+              id="description"
+              name="description"
+              value={gameData.description}
+              onChange={handleInputChange}
+            ></textarea>
+          </div>
+          <div className="form-group">
+        <label htmlFor="price" style={{fontWeight: 'bold'}}>Price</label>
         <input
           type="number"
           className="form-control"
@@ -174,58 +178,8 @@ function GameUploadForm() {
         />
       </div>
 
-      {/* <div className="form-group">
-        <label htmlFor="ownerId">Owner ID</label>
-        <input
-          type="number"
-          className="form-control"
-          id="ownerId"
-          name="ownerId"
-          value={gameData.ownerId}
-          onChange={handleInputChange}
-        />
-      </div> */}
-
-      {/* <div className="form-group">
-        <label htmlFor="collaboratorsIds">
-          Collaborators IDs (comma-separated)
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="collaboratorsIds"
-          name="collaboratorsIds"
-          value={gameData.collaboratorsIds}
-          onChange={handleInputChange}
-        />
-      </div> */}
-
-      {/* <div className="form-group">
-        <label htmlFor="uploadDate">Upload Date</label>
-        <input
-          type="date"
-          className="form-control"
-          id="uploadDate"
-          name="uploadDate"
-          value={gameData.uploadDate}
-          onChange={handleInputChange}
-        />
-      </div>
-
       <div className="form-group">
-        <label htmlFor="publishDate">Publish Date</label>
-        <input
-          type="date"
-          className="form-control"
-          id="publishDate"
-          name="publishDate"
-          value={gameData.publishDate}
-          onChange={handleInputChange}
-        />
-      </div> */}
-
-      <div className="form-group">
-        <label htmlFor="tags">Tags (comma-separated)</label>
+        <label htmlFor="tags" style={{fontWeight: 'bold'}}>Tags (comma-separated)</label>
         <input
           type="text"
           className="form-control"
@@ -237,7 +191,7 @@ function GameUploadForm() {
       </div>
 
       <div className="form-group">
-        <label htmlFor="genre">Genre</label>
+        <label htmlFor="genre" style={{fontWeight: 'bold'}}>Genre</label>
         <input
           type="text"
           className="form-control"
@@ -249,7 +203,7 @@ function GameUploadForm() {
       </div>
 
       <div className="form-group">
-        <label htmlFor="supportedPlatforms">
+        <label htmlFor="supportedPlatforms" style={{fontWeight: 'bold'}}>
           Supported Platforms (comma-separated)
         </label>
         <input
@@ -263,7 +217,7 @@ function GameUploadForm() {
       </div>
 
       <div className="form-group">
-        <label htmlFor="additionalTechnicalDescription">
+        <label htmlFor="additionalTechnicalDescription" style={{fontWeight: 'bold'}}>
           Additional Technical Description
         </label>
         <textarea
@@ -274,23 +228,44 @@ function GameUploadForm() {
           onChange={handleInputChange}
         ></textarea>
       </div>
-
-      {/* <div className="form-group">
-        <label htmlFor="status">Status</label>
-        <input
-          type="text"
-          className="form-control"
-          id="status"
-          name="status"
-          value={gameData.status}
-          onChange={handleInputChange}
-        />
-      </div> */}
-
+        </div>
+        <div className='col'>
+        <div class="mb-3">
+        <label for="downloadFile" class="form-label" style={{fontWeight: 'bold'}}>Download File</label>
+        <input 
+        className="form-control" 
+        type="file" 
+        id="downloadFile"
+        name="downloadFile"
+          onChange={handleFileChange}
+          ref={downloadFileRef} />
+      </div>
+      <div class="mb-3">
+        <label for="displayImage" class="form-label" style={{fontWeight: 'bold'}}>Display Image</label>
+        <input 
+        className="form-control" 
+        type="file" 
+        id="displayImage"
+        name="displayImage"
+          onChange={handleFileChange}
+          ref={displayImageRef} />
+      </div>
+      <div class="mb-3">
+        <label for="additionalImages" class="form-label" style={{fontWeight: 'bold'}}>Additional Images</label>
+        <input class="form-control" type="file" 
+        id="additionalImages"
+        name="additionalImages"
+        multiple
+        onChange={handleFileChange}
+        ref={additionalImagesRef}/>
+      </div>
       <button type="submit" className="btn btn-primary">
         Upload Game
       </button>
+        </div>
+      </div>
     </form>
+    </div>
   );
 }
 

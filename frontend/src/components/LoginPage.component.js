@@ -7,9 +7,9 @@ function LoginPage(props) {
   
   const [userInfo, setUserInfo] = useState({
     username: '',
-    email: '',
     password: ''
   });
+  const [errorMessage, setErrorMessage] = useState(null);
   let navigate = useNavigate(); 
   const handleInputChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
@@ -19,7 +19,6 @@ function LoginPage(props) {
 
     const formData = new URLSearchParams();
     formData.append('username', userInfo.username);
-    formData.append('email', userInfo.email);
     formData.append('password', userInfo.password);
 
     // Send formData to server
@@ -32,15 +31,21 @@ function LoginPage(props) {
       helper.login(token);
       props.setIsLoggedIn(true);
     } catch (error) {
-      console.error(error);
+      setErrorMessage(error.message);
+      return;
     }
 
     setUserInfo({
       username: '',
-      email: '',
       password: ''
     });
-    navigate("/");
+
+    if(helper.isUserAdmin()){
+      navigate("/admin");
+    }
+    else{
+      navigate("/");
+    }   
     
   };
 
@@ -48,11 +53,21 @@ function LoginPage(props) {
     <form
       onSubmit={handleLoginSubmit}
       className="container"
+      style={{textAlign: 'left'}}
     >
-      <p> Login </p>
-      <p>Enter your details below</p>
+      {
+        errorMessage != null && (
+          <p class="text-danger">{errorMessage}</p>
+          )
+      }
+      <div className='row' style={{marginTop: 1 + "rem"}}>
+        <div className='col'>
+        <img src="/gaming_image.jpg" className='rounded float-start' style={{ width: 100 + "%", height: "auto" }} alt="Display" /> 
+        </div>
+        <div className='col'>
+        <p style={{fontWeight: 'bold', fontSize: 3 + "em", marginLeft: 0, marginTop: .3 + "rem"}}> Login </p>
       <div className="form-group">
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username" style={{fontWeight: 'bolder'}}>Username</label>
         <input
           type="text"
           className="form-control"
@@ -64,19 +79,7 @@ function LoginPage(props) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          className="form-control"
-          id="email"
-          name="email"
-          value={userInfo.email}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password" style={{fontWeight: 'bolder'}}>Password</label>
         <input
           type="password"
           className="form-control"
@@ -87,14 +90,17 @@ function LoginPage(props) {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-primary" style={{marginTop: 1 + "rem"}}>
         Login
       </button>
 
-      <p>Don't have an account?</p>
+      <p style={{fontWeight: 'bold', fontSize: 1 + "em", marginLeft: 0}}>Don't have an account?</p>
       <button type="button" className="btn btn-primary">
         <Link to="/register" >Register</Link>
       </button>
+        </div>
+      </div>
+      
     </form>
   );
 }

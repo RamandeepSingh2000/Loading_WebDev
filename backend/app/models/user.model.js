@@ -19,6 +19,9 @@ const UserSchema = new Schema({
     },
     gamesOwnedIds: {
         type: [String]
+    },
+    gamesPurchasedIds: {
+        type: [String]
     }
 });
 
