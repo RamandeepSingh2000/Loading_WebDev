@@ -445,8 +445,8 @@ module.exports = {
                 success_url: `${process.env.CLIENT_URL}/game-info/${game.id}`,
                 cancel_url: `${process.env.CLIENT_URL}/game-info/${game.id}`
             });
-            user.gamesPurchasedIds.push(game.id);
-            await user.save();
+            //user.gamesPurchasedIds.push(game.id);
+            //await user.save();
             res.json(session.url);
         }
         catch(error){
@@ -457,8 +457,8 @@ module.exports = {
     stripeWebhook : async function(req, res){
         const event = req.body;
 
-        console.log(event);
-        console.log(event.data.object.metadata);
+        console.log(JSON.stringify(event));
+        console.log(JSON.stringify(event.data.object.metadata));
         res.json({received: true});
         return;
         // Handle the event
