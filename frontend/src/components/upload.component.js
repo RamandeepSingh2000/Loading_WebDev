@@ -72,7 +72,7 @@ function GameUploadForm() {
     // Send formData to server
     try {
       const response = await axios.post(
-        'http://localhost:8081/api/games',
+        `${process.env.REACT_APP_SERVER_URL}/api/games`,
         formData,
         {
           headers: {

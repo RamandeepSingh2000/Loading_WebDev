@@ -80,7 +80,7 @@ function GameEditPage() {
     // Send formData to server
     try {
       const response = await axios.put(
-        `http://localhost:8081/api/games/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/games/${id}`,
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data',

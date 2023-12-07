@@ -427,6 +427,7 @@ module.exports = {
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
+                customer_email: user.email,
                 line_items: [{
                     price_data:{
                         currency: 'cad',
@@ -437,6 +438,9 @@ module.exports = {
                     },
                     quantity: 1
                 }],
+                metadata: {
+                    gameId : game.id
+                },
                 mode: 'payment',
                 success_url: `${process.env.CLIENT_URL}/game-info/${game.id}`,
                 cancel_url: `${process.env.CLIENT_URL}/game-info/${game.id}`
@@ -448,6 +452,39 @@ module.exports = {
         catch(error){
             res.status(400).json({ Error: error })
         }   
+    },
+
+    stripeWebhook : async function(req, res){
+        const event = req.body;
+
+        console.log(event);
+        res.json({received: true});
+        return;
+        // Handle the event
+        switch (event.type) {
+          case 'payment_intent.succeeded':
+            const paymentIntent = event.data.object;
+            const email = paymentIntent.receipt_email;
+            const user = await userModel.findOne({email: email});
+            if(!user){
+                console.log("Can't find user");
+                break;
+            }
+            const gameId = paymentIntent.metadata.gameId;
+            if(!gameId){
+                console.log("Game id not found.");
+                break;
+            }
+            user.gamesPurchasedIds.push(gameId);
+            await user.save();
+            console.log('PaymentIntent was successful!');
+            break;
+          default:
+            break;
+        }
+      
+        // Return a 200 response to acknowledge receipt of the event
+        res.json({received: true});
     },
 
     gameDownload : async function(req, res){

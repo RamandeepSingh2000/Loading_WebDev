@@ -28,7 +28,7 @@ const GameInfoPage = () => {
       try {
         let response = null;
         if(!helper.isLoggedIn()){
-          response = await axios.get(`http://localhost:8081/api/games/${id}`);
+          response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games/${id}`);
         }
         else{
           const token = localStorage.getItem('jwtToken');
@@ -37,7 +37,7 @@ const GameInfoPage = () => {
               Authorization: `Bearer ${token}`,
             },
           };
-          response = await axios.get(`http://localhost:8081/api/user/games/${id}`, config);
+          response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/user/games/${id}`, config);
         }
          // Replace with your actual endpoint
         const data = response.data;
@@ -59,7 +59,7 @@ const GameInfoPage = () => {
 
       let gameDownloadURL = null;
       if(gameInfo.price == 0){
-        const response = await axios.get(`http://localhost:8081/api/games/download/free/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games/download/free/${id}`);
         gameDownloadURL = response.data;//get link from server;
       }
       else{
@@ -76,7 +76,7 @@ const GameInfoPage = () => {
                 Authorization: `Bearer ${token}`,
               },
             };
-            const response = await axios.get(`http://localhost:8081/api/games/download/${id}`, config);
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games/download/${id}`, config);
             gameDownloadURL = response.data; //get link from server;
           }
           else{
@@ -87,7 +87,7 @@ const GameInfoPage = () => {
                   Authorization: `Bearer ${token}`,
                 },
               };
-              const response = await axios.get(`http://localhost:8081/api/games/download/${id}`, config);
+              const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games/download/${id}`, config);
               gameDownloadURL = response.data; //get link from server;
             }
             else{
@@ -97,7 +97,7 @@ const GameInfoPage = () => {
                   Authorization: `Bearer ${token}`,
                 },
               };
-              const response = await axios.post(`http://localhost:8081/api/games/purchase/${id}`, null, config);
+              const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/games/purchase/${id}`, null, config);
               window.location = response.data;
               return;
             }
@@ -132,7 +132,7 @@ const GameInfoPage = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      await axios.delete(`http://localhost:8081/api/games/${id}`, config);
+      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/games/${id}`, config);
     }
     catch (error) {
       console.error('Error fetching game information', error);
@@ -147,7 +147,7 @@ const GameInfoPage = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      await axios.put(`http://localhost:8081/api/games/adminreview/${id}/${newStatus}`, null, config);
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/games/adminreview/${id}/${newStatus}`, null, config);
     }
     catch (error) {
       console.error(error);

@@ -6,7 +6,7 @@ const PurchasedGames = () => {
   const [games, setGames] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`http://localhost:8081/api/games/purchased/${id}`)
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games/purchased/${id}`)
     .then((res) => setGames(res.data))
     .catch((error) => console.error('Error fetching game data:', error));
   }, []); 
