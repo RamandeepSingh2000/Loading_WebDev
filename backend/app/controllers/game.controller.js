@@ -458,6 +458,7 @@ module.exports = {
         const event = req.body;
 
         console.log(event);
+        console.log(event.data.object.metadata);
         res.json({received: true});
         return;
         // Handle the event
