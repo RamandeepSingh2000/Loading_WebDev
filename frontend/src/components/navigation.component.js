@@ -9,9 +9,9 @@ export default class Navigation extends Component{
   }
 
   handleLogout = () => {
-    helper.logout();
-    this.props.navigation.navigate("/");
     this.props.setIsLoggedIn(false);
+    helper.logout();    
+    this.props.navigation.navigate("/");    
   };
 
   render(){
