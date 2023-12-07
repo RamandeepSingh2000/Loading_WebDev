@@ -445,8 +445,6 @@ module.exports = {
                 success_url: `${process.env.CLIENT_URL}/game-info/${game.id}`,
                 cancel_url: `${process.env.CLIENT_URL}/game-info/${game.id}`
             });
-            //user.gamesPurchasedIds.push(game.id);
-            //await user.save();
             res.json(session.url);
         }
         catch(error){
@@ -456,14 +454,9 @@ module.exports = {
 
     stripeWebhook : async function(req, res){
         const event = req.body;
-
-        console.log(JSON.stringify(event));
-        console.log(JSON.stringify(event.data.object.metadata));
-        res.json({received: true});
-        return;
         // Handle the event
         switch (event.type) {
-          case 'payment_intent.succeeded':
+          case 'checkout.session.completed':
             const paymentIntent = event.data.object;
             const email = paymentIntent.receipt_email;
             const user = await userModel.findOne({email: email});
