@@ -471,7 +471,7 @@ module.exports = {
             }
             user.gamesPurchasedIds.push(gameId);
             await user.save();
-            console.log('PaymentIntent was successful!');
+            console.log('Payment was successful!');
             break;
           default:
             break;
