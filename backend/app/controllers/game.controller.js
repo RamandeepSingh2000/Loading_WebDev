@@ -458,7 +458,7 @@ module.exports = {
         switch (event.type) {
           case 'checkout.session.completed':
             const paymentIntent = event.data.object;
-            const email = paymentIntent.receipt_email;
+            const email = paymentIntent.customer_email;
             const user = await userModel.findOne({email: email});
             if(!user){
                 console.log("Can't find user");
