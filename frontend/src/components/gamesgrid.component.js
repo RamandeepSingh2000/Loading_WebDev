@@ -9,7 +9,6 @@ export default class GamesGrid extends Component{
   }
 
   componentDidMount(){
-      
       axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games?numberOfGames=20`)
       .then(res => this.setState({games: res.data}))
       .catch(e => console.log(e));

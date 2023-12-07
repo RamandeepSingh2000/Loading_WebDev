@@ -12,10 +12,7 @@ module.exports = {
     },
 
     logout : function(){
-        localStorage.removeItem("jwtToken");
-        localStorage.removeItem("id");
-        localStorage.removeItem("username");
-        localStorage.removeItem("isAdmin");
+        localStorage.clear();
     },
 
     getAuthToken : function(){
