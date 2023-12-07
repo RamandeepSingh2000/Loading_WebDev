@@ -10,14 +10,14 @@ export default class GamesGrid extends Component{
 
   componentDidMount(){
       
-      axios.get('http://localhost:8081/api/games?numberOfGames=20')
+      axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games?numberOfGames=20`)
       .then(res => this.setState({games: res.data}))
       .catch(e => console.log(e));
   }
 
   // //not sure if it should be done like this. making an api request every update.
   // componentDidUpdate(){
-  //     axios.get('http://localhost:8081/api/games?numberOfGames=20')
+  //     axios.get('${process.env.SERVER_URL}/api/games?numberOfGames=20')
   //     .then(res => this.setState({games: res.data}))
   //     .catch(e => console.log(e));
   // }
@@ -31,7 +31,7 @@ export default class GamesGrid extends Component{
   }
 
   handleInputChange(input){
-    let url = 'http://localhost:8081/api/games?numberOfGames=20';
+    let url = `${process.env.REACT_APP_SERVER_URL}/api/games?numberOfGames=20`;
     if(input){
       url += `&searchKeyword=${input}`;
     }

@@ -31,7 +31,7 @@ function AdminRegisterPage(props) {
     // Send formData to server
     try {
       const response = await axios.post(
-        `http://localhost:8081/api/adminregister`,
+        `${process.env.REACT_APP_SERVER_URL}/api/adminregister`,
         formData,
         config
       );

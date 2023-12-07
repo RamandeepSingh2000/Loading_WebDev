@@ -11,7 +11,7 @@ export default class GamesGridAdmin extends Component{
 
   componentDidMount(){
       
-      axios.get('http://localhost:8081/api/games/unpublished',{
+      axios.get(`${process.env.REACT_APP_SERVER_URL}/api/games/unpublished`,{
       headers: {
         Authorization: `Bearer ${helper.getAuthToken()}`,
       },
@@ -22,7 +22,7 @@ export default class GamesGridAdmin extends Component{
 
   // //not sure if it should be done like this. making an api request every update.
   // componentDidUpdate(){
-  //     axios.get('http://localhost:8081/api/games?numberOfGames=20')
+  //     axios.get('${process.env.SERVER_URL}/api/games?numberOfGames=20')
   //     .then(res => this.setState({games: res.data}))
   //     .catch(e => console.log(e));
   // }

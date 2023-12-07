@@ -24,7 +24,7 @@ function LoginPage(props) {
     // Send formData to server
     try {
       const response = await axios.post(
-        `http://localhost:8081/api/login`,
+        `${process.env.REACT_APP_SERVER_URL}/api/login`,
         formData
       );
       var token = response.data.token;

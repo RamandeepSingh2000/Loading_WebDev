@@ -26,7 +26,7 @@ function RegisterPage(props) {
     // Send formData to server
     try {
       const response = await axios.post(
-        `http://localhost:8081/api/register`,
+        `${process.env.REACT_APP_SERVER_URL}/api/register`,
         formData
       );
       console.log(response.data);
@@ -56,7 +56,7 @@ function RegisterPage(props) {
     //login
     try {
       const response = await axios.post(
-        `http://localhost:8081/api/login`,
+        `${process.env.REACT_APP_SERVER_URL}/api/login`,
         formData
       );
       var token = response.data.token;

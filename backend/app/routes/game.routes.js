@@ -123,6 +123,10 @@ router.route('/api/games/purchase/:id').post(
   await gameController.gamePurchase(req, res);
 });
 
+router.route('/api/stripe/webhook').post(async (req, res) => {
+  await gameController.stripeWebhook(req, res);
+});
+
 //Delete game
 router.route('/api/games/:id').delete(passport.authenticate('jwt', { session: false }),
 async (req,res)=>{
