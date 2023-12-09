@@ -62,6 +62,46 @@ module.exports = {
             res.status(400).json({ Error: err.message || err });
         }    
     },
+    getGamesAdmin : async function(req, res){
+        try {
+            const searchKeyword = req.query.searchKeyword;
+            let customQuery = {};
+            if (searchKeyword) {
+                customQuery = {
+                  $and: [
+                    {
+                      $or: [
+                        { name: { $regex: searchKeyword, $options: 'i' } },
+                        { tags: { $in: [searchKeyword] } },
+                        { genre: { $regex: searchKeyword, $options: 'i' } },
+                        { supportedPlatforms: { $in: [searchKeyword] } },
+                      ],
+                    }
+                  ],
+                };
+              }
+            const numberOfGames = req.query.numberOfGames ?? 5;
+            const games = await gameModel.find(customQuery).limit(numberOfGames);
+            
+            const gamesDisplayInfos = await Promise.all(
+              games.map(async (game) => {
+                const displayImageURL = await getImageURL(game.displayImageRef);    
+                return {
+                  _id: game._id,
+                  name: game.name,
+                  price: game.price,
+                  tags: game.tags,
+                  displayImageURL: displayImageURL,
+                };
+              })
+            );
+        
+            res.status(200).send(gamesDisplayInfos);
+        } 
+        catch (err) {
+            res.status(400).json({ Error: err.message || err });
+        }    
+    },
 
     getOwnedGames: async function(req, res){
 

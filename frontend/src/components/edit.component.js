@@ -100,7 +100,8 @@ function GameEditPage() {
         errors.push(error.response.data.Error);
       }     
       setErrorMessages(errors);
-      console.log(errorMessages);
+      setUploadInProgress(false);
+        setUploadMessage(null);
       return;
     }
 

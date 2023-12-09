@@ -153,7 +153,7 @@ const GameInfoPage = () => {
       console.error(error);
     }
 
-    navigate("/admin");
+    navigate(`/admin`);
   }
   return (
     <div>
@@ -179,7 +179,7 @@ const GameInfoPage = () => {
       <p>Supported Platforms: {gameInfo.supportedPlatforms}</p>      
       <p>Upload Date: {gameInfo.uploadDate.toDateString()}</p>
       <p>Publish Date: {gameInfo.publishDate.toDateString()}</p>
-      <p>Status: {gameInfo.status}</p>
+      <p>Status: {gameInfo.status == "Uploaded" ? "Uploaded (Approval Pending)" : gameInfo.status}</p>
       <p>Price: ${gameInfo.price}</p>
       <div className='container'>
         <div className='row'>
@@ -194,12 +194,21 @@ const GameInfoPage = () => {
           (helper.isLoggedIn() && helper.isUserAdmin()) && (
             <div className='col'>
               <div className='row'>
-            <div className='col'>
-              <button className='btn btn-success' onClick={() => handleReview(id, "Published")}>Approve</button>
-              </div>
-              <div className='col'>
-              <button className='btn btn-danger' onClick={() => handleReview(id, "Blocked")}>Deny</button>
-              </div>
+                {
+                  (gameInfo.status == "Uploaded" || gameInfo.status == "Blocked") && (
+                    <div className='col'>
+                    <button className='btn btn-success' onClick={() => handleReview(id, "Published")}>Approve</button>
+                    </div>
+                    )
+                }
+                {
+                  (gameInfo.status == "Uploaded" || gameInfo.status == "Published") && (
+                    <div className='col'>
+                    <button className='btn btn-danger' onClick={() => handleReview(id, "Blocked")}>Deny</button>
+                    </div>
+                    )
+                }           
+              
               </div>
               </div>
             )
