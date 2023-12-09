@@ -14,6 +14,7 @@ import RegisterPage from './components/RegisterPage.component'
 import helper from './helper'
 import HomeAdmin from './components/home.admin.component';
 import AdminRegisterPage from "./components/register.admin.component";
+import Unpublished from './components/unpublished.admin.component';
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(helper.isLoggedIn());
@@ -36,6 +37,7 @@ function App() {
             <Route path='/game-edit/:id' element={ <GameEditPage/>}/>
             <Route path='/' element={ <Home/>}/>
             <Route path='/admin' element={ <HomeAdmin/>}/>
+            <Route path='/admin/unpublished' element={<Unpublished/>}/>
           </Routes>
         </BrowserRouter>
       </div>

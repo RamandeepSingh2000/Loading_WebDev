@@ -66,6 +66,11 @@ router.route('/api/games/owned/:id').get(async (req, res) => {
 router.route('/api/games/purchased/:id').get(async (req, res) => {
   await gameController.getPurchasedGames(req, res);
 });
+router.route('/api/admin/games').get(
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    await gameController.getGamesAdmin(req, res);
+})
 
 router.route("/api/games/adminreview/:id/:newStatus").put(
   passport.authenticate('jwt', { session: false }),

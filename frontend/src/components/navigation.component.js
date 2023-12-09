@@ -36,6 +36,13 @@ export default class Navigation extends Component{
                     {
                       (this.props.isLoggedIn && helper.isUserAdmin()) && (
                         <li class="nav-item">
+                          <Link to="/admin/unpublished" className="nav-link">Unpublished</Link>
+                        </li>
+                        )
+                    }
+                    {
+                      (this.props.isLoggedIn && helper.isUserAdmin()) && (
+                        <li class="nav-item">
                           <Link to="/admin/register" className="nav-link">New Admin</Link>
                         </li>
                         )
