@@ -10,6 +10,11 @@ const {Upload} = require('@aws-sdk/lib-storage');
 const crypto = require('crypto');
 const randomFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 const fs = require('fs').promises;
+const OpenAI = require('openai');
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 const s3 = new S3Client({
     credentials:{
@@ -519,6 +524,30 @@ module.exports = {
       
         // Return a 200 response to acknowledge receipt of the event
         res.json({received: true});
+    },
+    generateGameDesc: async function(req, res){
+        try{
+            var userDesc = req.query.userDesc;
+            if(!userDesc){
+                res.status(400).json({ error: "We need a basic description in order to improve it." })
+                return;
+            }
+            const chatCompletion = await openai.chat.completions.create({
+                messages: [
+                    { role: "system", content: "You must create a proper game description between 30-50 words from the given user input." + 
+                    "Your response should only contain the generated game description."},
+                    { role: "user", content: "Midnight Horror. Horror game. Alone inside the house. Jump scares. Scary."},
+                    { role: "assistant", content: "Immerse yourself in the chilling ambiance of 'Midnight Horror,' a spine-tingling game that thrusts you into a spooky, isolated house where darkness reigns. Navigate the eerie corridors alone as you brace yourself for heart-stopping jump scares that lurk around every corner. Can you survive the night in this atmospheric horror experience?"},
+                    { role: 'user', content: userDesc }
+                ],
+                model: 'gpt-3.5-turbo',
+              });
+        
+            res.status(200).json({ description: chatCompletion.choices[0].message.content });
+        }
+        catch(error){
+            res.status(400).json({ error: error })
+        } 
     },
 
     gameDownload : async function(req, res){
