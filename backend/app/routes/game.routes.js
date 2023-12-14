@@ -138,6 +138,10 @@ async (req,res)=>{
   await gameController.deleteGame(req, res);
 });
 
+router.route('/api/ai/generategamedesc').get(async (req, res) => {
+  await gameController.generateGameDesc(req, res);
+})
+
 //For development
 router.route('/api/games/').delete(async (req,res)=>{
   await gameController.deleteAll(req, res);

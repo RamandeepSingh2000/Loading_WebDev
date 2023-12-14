@@ -8,6 +8,7 @@ function GameEditPage() {
   const [errorMessages, setErrorMessages] = useState([]);
   const [uploadInProgress, setUploadInProgress] = useState(false);
   const [uploadMessage, setUploadMessage] = useState(null);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
   const [gameData, setGameData] = useState({
     name: '',
     description: '',
@@ -125,6 +126,37 @@ function GameEditPage() {
     setUploadInProgress(false);
     setUploadMessage("Your game is successfully updated. You can make more changes if you like.")
   };
+  const handleDescriptionGeneration = async (e) => {
+    try{
+      if(generatingDescription){
+        return;
+      }
+      setGeneratingDescription(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/ai/generategamedesc`,
+        {
+          params:{
+            userDesc: gameData.description
+          }
+        }    
+      );
+
+      setGameData({...gameData, description: response.data.description});
+      setErrorMessages([]);
+    }
+    catch(error){
+      const errors = errorMessages.slice();
+      if(error.response.data.error){
+        if(!errors.includes(error.response.data.error)){
+          errors.push(error.response.data.error);
+          setErrorMessages(errors);
+          console.log(errors);
+        }        
+      }      
+    }
+
+    setGeneratingDescription(false);
+  }
 
     return (
       <div>
@@ -169,10 +201,20 @@ function GameEditPage() {
                 className="form-control"
                 id="description"
                 name="description"
+                rows="5"
                 value={gameData.description}
                 onChange={handleInputChange}
               ></textarea>
             </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          {
+            !generatingDescription ? (
+              <button type="button" onClick={handleDescriptionGeneration} class="btn btn-dark">Improve Description</button>
+              ) : (
+                <p class="text-success">Generating description...</p>
+                )
+          }            
+          </div>
             <div className="form-group">
           <label htmlFor="price" style={{fontWeight: 'bold'}}>Price</label>
           <input
